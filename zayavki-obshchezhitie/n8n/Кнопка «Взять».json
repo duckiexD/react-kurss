@@ -1,0 +1,344 @@
+{
+  "name": "Кнопка «Взять»",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "seconds",
+              "secondsInterval": 10
+            }
+          ]
+        }
+      },
+      "name": "Каждые 10 секунд",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -496,
+        32
+      ],
+      "id": "b8711170-b2a7-4e0b-bc00-b83e0f9bff95"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.telegram.org/bot{{ $env.TELEGRAM_TOKEN }}/getUpdates",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "timeout",
+              "value": "0"
+            },
+            {
+              "name": "allowed_updates",
+              "value": "[\"callback_query\"]"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Нажатия",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -288,
+        32
+      ],
+      "id": "03552949-e977-4deb-b8c2-143a8f4a2d3b"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.result.length }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "name": "Есть нажатия?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -64,
+        32
+      ],
+      "id": "2d02483d-be00-499d-ba87-9a6a8d6ed0ee"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.telegram.org/bot{{ $env.TELEGRAM_TOKEN }}/getUpdates",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "offset",
+              "value": "={{ $json.result[$json.result.length - 1].update_id + 1 }}"
+            },
+            {
+              "name": "timeout",
+              "value": "0"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Отметить прочитанными",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        160,
+        -112
+      ],
+      "id": "f40daff8-3881-4795-a928-3f59b4b1922c"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "result",
+        "options": {}
+      },
+      "name": "По одному",
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        160,
+        128
+      ],
+      "id": "0bb863ce-ea5b-4a32-baa2-a4572ab07cfc"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b1",
+              "name": "id",
+              "value": "={{ $json.callback_query.data.replace('take:', '') }}",
+              "type": "string"
+            },
+            {
+              "id": "b2",
+              "name": "queryId",
+              "value": "={{ $json.callback_query.id }}",
+              "type": "string"
+            },
+            {
+              "id": "b3",
+              "name": "chatId",
+              "value": "={{ $json.callback_query.message.chat.id }}",
+              "type": "string"
+            },
+            {
+              "id": "b4",
+              "name": "messageId",
+              "value": "={{ $json.callback_query.message.message_id }}",
+              "type": "string"
+            },
+            {
+              "id": "b5",
+              "name": "text",
+              "value": "={{ $json.callback_query.message.text }}",
+              "type": "string"
+            },
+            {
+              "id": "b6",
+              "name": "master",
+              "value": "={{ $json.callback_query.from.first_name }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Кто и что нажал",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        384,
+        128
+      ],
+      "id": "5b25b683-787c-4970-b3a5-867f79e088cc"
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=http://pocketbase:8090/api/collections/obshchezhitie/records/{{ $json.id }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { status: 'В работе' } }}",
+        "options": {}
+      },
+      "name": "Статус в базу",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        608,
+        128
+      ],
+      "id": "5855c550-cfe5-4138-b7ec-d9c84d082075"
+    },
+    {
+      "parameters": {
+        "resource": "callback",
+        "queryId": "={{ $('Кто и что нажал').item.json.queryId }}",
+        "additionalFields": {
+          "text": "Заявка ваша"
+        }
+      },
+      "name": "Ответ на нажатие",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        832,
+        128
+      ],
+      "id": "55738a98-9004-4d01-8f8b-3d6bfafa417e",
+      "webhookId": "29dad538-a6d0-4ddb-8eb6-37d02f6403a4",
+      "credentials": {
+        "telegramApi": {
+          "id": "RbKomWcV59FkkXLL",
+          "name": "Telegram account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "editMessageText",
+        "chatId": "={{ $('Кто и что нажал').item.json.chatId }}",
+        "messageId": "={{ $('Кто и что нажал').item.json.messageId }}",
+        "text": "={{ $('Кто и что нажал').item.json.text }}\n\n✅ Взял: {{ $('Кто и что нажал').item.json.master }}",
+        "additionalFields": {}
+      },
+      "name": "Изменить сообщение",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1040,
+        128
+      ],
+      "id": "460c56a7-82fb-4a33-b8a1-f3bfc7a0ee54",
+      "webhookId": "f8262fb0-d4ad-4917-bf0e-9344dfe9f3d6",
+      "credentials": {
+        "telegramApi": {
+          "id": "RbKomWcV59FkkXLL",
+          "name": "Telegram account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Каждые 10 секунд": {
+      "main": [
+        [
+          {
+            "node": "Нажатия",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Нажатия": {
+      "main": [
+        [
+          {
+            "node": "Есть нажатия?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Есть нажатия?": {
+      "main": [
+        [
+          {
+            "node": "Отметить прочитанными",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "По одному",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "По одному": {
+      "main": [
+        [
+          {
+            "node": "Кто и что нажал",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Кто и что нажал": {
+      "main": [
+        [
+          {
+            "node": "Статус в базу",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Статус в базу": {
+      "main": [
+        [
+          {
+            "node": "Ответ на нажатие",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ответ на нажатие": {
+      "main": [
+        [
+          {
+            "node": "Изменить сообщение",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "94a99ea9-4d5c-4ced-9dea-6dfda5c6654c",
+  "meta": {
+    "instanceId": "14bb90bc3ce1238c9d77d1103fa25e949a7707689c4729ca6fb6511416866a15"
+  },
+  "nodeGroups": [],
+  "id": "yybBWgXsAUI8Okze",
+  "tags": []
+}
