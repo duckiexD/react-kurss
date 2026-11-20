@@ -3,8 +3,8 @@
 Сдача модуля 3 справочника «Angular и React» (М. Н. Макаров). Код проекта в этот репозиторий
 не копируется, он лежит в отдельном репозитории `monitoring`.
 
-- Репозиторий: https://github.com/skywaJlker192/monitoring
-- Сайт на GitHub Pages: https://skywajlker192.github.io/monitoring/
+- Репозиторий: https://github.com/duckiexD/monitoring
+- Сайт на GitHub Pages: https://duckiexD.github.io/monitoring/
 - Журнал работы с ИИ: [`ai-log.md`](ai-log.md)
 - Снимок сообщения бота о сайте, который перестал открываться: `bot-message.png` (добавить перед сдачей)
 
