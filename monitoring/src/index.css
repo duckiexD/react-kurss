@@ -1,0 +1,168 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+  background: #f5f6f9;
+  color: #1f2430;
+}
+
+.header {
+  padding: 24px 32px;
+  background: #1f2430;
+  color: #ffffff;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 28px;
+}
+
+.header p {
+  margin: 6px 0 0;
+  color: #c4cad8;
+}
+
+.nav {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.nav a {
+  padding: 6px 14px;
+  border-radius: 16px;
+  color: #b8c0d4;
+  text-decoration: none;
+}
+
+.nav a.active {
+  background: #ffffff;
+  color: #1f2430;
+}
+
+.main {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 24px 32px;
+}
+
+.main h2 {
+  margin: 0 0 12px;
+}
+
+.summary {
+  margin: 0 0 16px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  background: #e7f5ec;
+  color: #1d6b3c;
+  font-weight: 600;
+}
+
+.summary--bad {
+  background: #fde8e8;
+  color: #b42318;
+}
+
+.sites {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.site {
+  padding: 16px;
+  border: 1px solid #dfe3eb;
+  border-radius: 8px;
+  background: #ffffff;
+  border-left: 6px solid #2e9d5b;
+}
+
+.site--bad {
+  border-left-color: #d23b3b;
+}
+
+.site h2 {
+  margin: 0 0 6px;
+  font-size: 18px;
+}
+
+.site h2 a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.site h2 a:hover {
+  color: #2f6fde;
+  text-decoration: underline;
+}
+
+.site a {
+  color: #2f6fde;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
+.site__status {
+  display: block;
+  margin-bottom: 6px;
+  color: #2e9d5b;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.site--bad .site__status {
+  color: #d23b3b;
+}
+
+.site--page {
+  margin-bottom: 20px;
+}
+
+.site__ratio {
+  margin: 10px 0 0;
+  font-weight: 600;
+}
+
+.history {
+  width: 100%;
+  border-collapse: collapse;
+  background: #ffffff;
+  border: 1px solid #dfe3eb;
+}
+
+.history th,
+.history td {
+  padding: 8px 12px;
+  border-bottom: 1px solid #dfe3eb;
+  text-align: left;
+}
+
+.history__bad {
+  background: #fde8e8;
+  color: #b42318;
+}
+
+.back {
+  display: inline-block;
+  margin-bottom: 16px;
+  color: #2f6fde;
+  text-decoration: none;
+}
+
+.empty {
+  color: #8a93a6;
+}
+
+.load-error {
+  padding: 16px;
+  border-radius: 8px;
+  background: #fde8e8;
+  color: #b42318;
+}
