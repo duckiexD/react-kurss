@@ -12,8 +12,8 @@ projects/
   p1-zayavki-obshchezhitie/     модуль 1: доска на localStorage
   p2-zayavki-obshchezhitie/     модуль 2: доска с PocketBase и ИИ-диспетчером
   n8n/                          json-файлы модуля 2
-    ИИ.json                     модуль 2: ИИ-диспетчер
-    knopka-vzyat.json           модуль 2: кнопка «Взять» в Telegram
+    ИИ-диспетчер.json                     модуль 2: ИИ-диспетчер
+    Кнопка "Взять".json           модуль 2: кнопка «Взять» в Telegram
   p3-monitoring/                модуль 3: README.md и ai-log.md (код — в папке monitoring)
 ```
 
